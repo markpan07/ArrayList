@@ -1,5 +1,6 @@
 package org.example.service;
 
+import org.example.exception.ElementNotFoundException;
 import org.example.exception.OutOfBoundException;
 import org.example.exception.TooLittleArrayException;
 import org.example.interfaces.StringList;
@@ -43,7 +44,10 @@ public class StringListImpl implements StringList {
     }
 
     @Override
-    public String set(int index, String item) throws OutOfBoundException {
+    public String set(int index, String item) throws OutOfBoundException, NullPointerException {
+        if (item == null) {
+            throw new NullPointerException();
+        }
         if (index < 0 || index >= storage.length || storage[index] == null) {
             throw new OutOfBoundException("There is no element with such index");
         }
@@ -53,32 +57,66 @@ public class StringListImpl implements StringList {
 
     @Override
     public String remove(String item) {
-        return null;
+        int index = indexOf(item);
+        if(index == -1) {
+            throw new ElementNotFoundException("There is no element with such index");
+        }
+        return remove(index);
     }
 
     @Override
     public String remove(int index) {
-        return null;
+        if (index < 0 || index >= storage.length - 1 || storage[index] == null) {
+            throw new ElementNotFoundException("There is no element with such index");
+        }
+        String del = storage[index];
+        storage[index] = null;
+        shiftToLeft(index);
+        pointer--;
+        return del;
     }
 
     @Override
     public boolean contains(String item) {
-        return false;
+        if(indexOf(item) != -1) {
+            return true;
+        } else {
+            return false;
+        }
     }
 
     @Override
-    public int indexOf(String item) {
-        return 0;
+    public int indexOf(String item) throws NullPointerException {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+        for (int i = 0; i < storage.length - 1; i++) {
+            if (storage[i] != null && storage[i].equals(item)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
-    public int lastIndexOf(String item) {
-        return 0;
+    public int lastIndexOf(String item) throws NullPointerException {
+        if (item == null) {
+            throw new NullPointerException();
+        }
+        for (int i = storage.length - 1; i >= 0; i--) {
+            if (storage[i] != null && storage[i].equals(item)) {
+                return i;
+            }
+        }
+        return -1;
     }
 
     @Override
-    public String get(int index) {
-        return null;
+    public String get(int index) throws ElementNotFoundException {
+        if (index < 0 || index >= storage.length - 1 || storage[index] == null) {
+            throw new ElementNotFoundException("There is no element with such index");
+        }
+        return storage[index];
     }
 
     @Override
@@ -116,9 +154,6 @@ public class StringListImpl implements StringList {
         return out;
     }
 
-    public int getSizeArray() {
-        return storage.length;
-    }
 
     private void resize() {
         String[] storage2 = new String[(int) (storage.length * 1.5 + 1)];
@@ -136,7 +171,11 @@ public class StringListImpl implements StringList {
         storage[index] = null;
     }
 
-    public List<String> getAll(){
-        return Collections.unmodifiableList(List.of(storage));
+    private void shiftToLeft(int index) {
+        for (int i = index; i < storage.length - 1; i++) {
+            storage[i] = storage[i + 1];
+        }
+
     }
+
 }
