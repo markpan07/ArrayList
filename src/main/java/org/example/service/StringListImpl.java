@@ -4,6 +4,10 @@ import org.example.exception.OutOfBoundException;
 import org.example.exception.TooLittleArrayException;
 import org.example.interfaces.StringList;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public class StringListImpl implements StringList {
 
     private String[] storage = new String[4];
@@ -107,7 +111,9 @@ public class StringListImpl implements StringList {
 
     @Override
     public String[] toArray() {
-        return new String[0];
+        String[] out = new String[storage.length];
+        System.arraycopy(storage, 0, out, 0, storage.length);
+        return out;
     }
 
     public int getSizeArray() {
@@ -128,5 +134,9 @@ public class StringListImpl implements StringList {
             storage[i + 1] = storage[i];
         }
         storage[index] = null;
+    }
+
+    public List<String> getAll(){
+        return Collections.unmodifiableList(List.of(storage));
     }
 }

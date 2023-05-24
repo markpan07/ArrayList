@@ -30,7 +30,7 @@ class StringListImplTest {
         String[] expected = new String[]{"String1", "String2", "String3", "String4", "String5", null, null};
         Assertions.assertThat(expected).
                 usingRecursiveComparison().
-                isEqualTo(out);
+                isEqualTo(out.toArray());
     }
 
     @Test
@@ -39,7 +39,7 @@ class StringListImplTest {
         String[] expected = new String[]{"String1", "newString", "String2", null};
         Assertions.assertThat(expected).
                 usingRecursiveComparison().
-                isEqualTo(out);
+                isEqualTo(out.toArray());
     }
 
     @Test
@@ -47,10 +47,10 @@ class StringListImplTest {
         out.add("String3");
         out.add("String4");
         out.add(2, "newString");
-        String[] expected = new String[]{"String1", "newString", "String3", "String4", null, null, null};
+        String[] expected = new String[]{"String1", "String2", "newString", "String3", "String4", null, null};
         Assertions.assertThat(expected).
                 usingRecursiveComparison().
-                isEqualTo(out);
+                isEqualTo(out.toArray());
     }
 
     @Test
@@ -64,6 +64,11 @@ class StringListImplTest {
 
     @Test
     void set() {
+        out.set(1, "newString");
+        String[] expected = new String[]{"String1", "newString", null, null};
+        Assertions.assertThat(expected).
+                usingRecursiveComparison().
+                isEqualTo(out.toArray());
     }
 
     @Test
@@ -96,6 +101,13 @@ class StringListImplTest {
 
     @Test
     void size() {
+        Assertions.assertThat(out.size()).
+                isEqualTo(2);
+        out.add("String3");
+        out.add("String4");
+        out.add("String5");
+        Assertions.assertThat(out.size()).
+                isEqualTo(5);
     }
 
     @Test
@@ -104,6 +116,17 @@ class StringListImplTest {
 
     @Test
     void clear() {
+        out.clear();
+        String[] expected = new String[] {null, null, null, null};
+        Assertions.assertThat(expected).
+                usingRecursiveComparison().
+                isEqualTo(out.toArray());
+        out.add("String1");
+        out.add("String2");
+        String[] expected2 = new String[] {"String1", "String2", null, null};
+        Assertions.assertThat(expected2).
+                usingRecursiveComparison().
+                isEqualTo(out.toArray());
     }
 
     @Test
