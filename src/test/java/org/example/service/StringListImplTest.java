@@ -11,7 +11,7 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class StringListImplTest {
-    private StringListImpl out = new StringListImpl();
+    private StringListImpl out = new StringListImpl(4);
 
     @BeforeEach
     void setUp() {

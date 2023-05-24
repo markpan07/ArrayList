@@ -11,8 +11,11 @@ import java.util.List;
 
 public class StringListImpl implements StringList {
 
-    private String[] storage = new String[4];
+    private String[] storage;
     int pointer = 0;
+    StringListImpl(int arraySize) {
+        storage = new String[arraySize];
+    }
 
 
     @Override
